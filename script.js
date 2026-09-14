@@ -1,0 +1,15 @@
+const PHONE='212661433720',NAME='CIL IMMO';
+document.getElementById('menuToggle')?.addEventListener('click',()=>document.getElementById('nav')?.classList.toggle('open'));
+document.querySelectorAll('.nav a').forEach(a=>a.addEventListener('click',()=>document.getElementById('nav')?.classList.remove('open')));
+document.getElementById('bookingForm')?.addEventListener('submit',function(e){e.preventDefault();const f=e.target;let m='Bonjour '+NAME+',%0A*Visite*%0ANom: '+f.name.value+'%0ATél: '+f.phone.value+'%0AObjectif: '+f.interest.value+'%0ADate: '+f.date.value;window.open('https://wa.me/'+PHONE+'?text='+m,'_blank');f.reset();alert('WhatsApp va s\'ouvrir.')});
+document.getElementById('estimateForm')?.addEventListener('submit',function(e){e.preventDefault();const f=e.target;let m='Bonjour '+NAME+',%0A*Estimation*%0ANom: '+f.name.value+'%0ATél: '+f.phone.value;window.open('https://wa.me/'+PHONE+'?text='+m,'_blank');f.reset();alert('WhatsApp va s\'ouvrir.')});
+const replies={welcome:'Bonjour 👋 Assistant CIL IMMO.',services:'Vente, location, gestion locative, syndic.',zones:'Mohammedia, Casablanca, Dar Bouazza, Bouskoura.',visite:'Formulaire Visite.',estimation:'Formulaire Estimation.',contact:'+212 661 43 37 20',default:'Services, zones, visite ?'};
+const quick=[{l:'Services',k:'services'},{l:'Zones',k:'zones'},{l:'Visite',k:'visite'},{l:'Contact',k:'contact'}];
+function addMsg(t,w){const b=document.getElementById('chatMessages');if(!b)return;const d=document.createElement('div');d.className='chat-msg '+w;d.textContent=t;b.appendChild(d);b.scrollTop=b.scrollHeight}
+function getR(i){const t=(i||'').toLowerCase();if(t.includes('service')||t.includes('syndic'))return replies.services;if(t.includes('zone')||t.includes('casa'))return replies.zones;if(t.includes('visite'))return replies.visite;if(t.includes('estim'))return replies.estimation;if(t.includes('contact'))return replies.contact;return replies.default}
+function initChat(){const b=document.getElementById('chatMessages');if(!b)return;b.innerHTML='';addMsg(replies.welcome,'bot');const q=document.getElementById('chatQuick');q.innerHTML='';quick.forEach(x=>{const btn=document.createElement('button');btn.type='button';btn.textContent=x.l;btn.onclick=()=>{addMsg(x.l,'user');setTimeout(()=>addMsg(getR(x.k),'bot'),300)};q.appendChild(btn)})}
+function send(){const i=document.getElementById('chatInput');if(!i||!i.value.trim())return;addMsg(i.value.trim(),'user');const v=i.value;i.value='';setTimeout(()=>addMsg(getR(v),'bot'),350)}
+document.getElementById('chatToggle')?.addEventListener('click',()=>{const p=document.getElementById('chatPanel');p.classList.toggle('open');if(p.classList.contains('open')&&!document.getElementById('chatMessages').children.length)initChat()});
+document.getElementById('chatClose')?.addEventListener('click',()=>document.getElementById('chatPanel')?.classList.remove('open'));
+document.getElementById('chatSend')?.addEventListener('click',e=>{e.preventDefault();send()});
+document.getElementById('chatInput')?.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();send()}});
